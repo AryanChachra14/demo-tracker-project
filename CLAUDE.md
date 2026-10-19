@@ -14,7 +14,9 @@ no build step, no package manager, no server code. Entries are saved in the brow
 |---|---|
 | `index.html` | The whole app: markup, one `<style>` block and one inline `<script>` (an IIFE). Loads `@supabase/supabase-js@2.117.2` from jsDelivr. |
 | `supabase-setup.sql` | One-time Supabase setup: table `public.tracker_days` (one row per user per day, `entry` as JSONB) with row-level security so each user reads and writes only their own rows. |
-| `agent-workflow.png`, `agent-workflow.svg` | A diagram from a different project. Not part of the app: don't edit or reference them. |
+| `package.json` | Only defines `npm test`. There are no dependencies. |
+| `test/index.test.mjs` | Checks on `index.html` that need no browser (see "Tests and lint"). |
+| `README.md` | Just the repo title. |
 
 ## How the script works
 
@@ -49,8 +51,21 @@ Sign-in and sync need internet access, because the Supabase client loads from a 
 
 ## Tests and lint
 
-There are **no automated tests and no linter** yet. Check a change by opening the page, using
-the affected controls, and watching the browser console for errors.
+```
+npm test
+```
+
+This runs Node's built-in test runner (Node 20 or later). There is nothing to install. The tests
+in `test/index.test.mjs` check that:
+
+- the page has exactly one inline script, and it compiles;
+- every element id the script looks up with a fixed `$('id')` exists in the page.
+
+They don't run the app. After a change, also open the page, use the affected controls and watch
+the browser console for errors. There is no linter.
+
+When you add a control the script looks up, give it an id in the markup. When you rename an id,
+rename it in both places. Keep the tests dependency-free: Node built-ins only.
 
 ## Conventions
 

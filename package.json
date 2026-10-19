@@ -1,0 +1,11 @@
+{
+  "name": "demo-tracker-project",
+  "private": true,
+  "description": "42-Day Fitness Tracker: one static page. Tests use only Node's built-in test runner; there are no dependencies to install.",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node --test"
+  }
+}
