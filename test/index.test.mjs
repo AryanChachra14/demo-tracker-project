@@ -32,3 +32,12 @@ test("every element id the script looks up exists in the page", () => {
   const missing = [...lookups].filter((id) => !pageIds.has(id));
   assert.deepEqual(missing, [], `ids looked up by the script but missing from the page: ${missing.join(", ")}`);
 });
+
+test("the day counter's total matches the plan length in the title", () => {
+  const title = html.match(/<title>(\d+)-Day\b/);
+  assert.ok(title, "found no 'N-Day' in the page title");
+  // Totals in labels like `Day ${...} of 42`.
+  const totals = [...script.matchAll(/Day \$\{[^}]*\} of (\d+)/g)].map((m) => m[1]);
+  assert.ok(totals.length > 0, "found no 'Day ${...} of N' label in the script");
+  assert.deepEqual([...new Set(totals)], [title[1]]);
+});
